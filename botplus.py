@@ -16,10 +16,22 @@ load_dotenv()
 # ==========================================
 # 1. CẤU HÌNH BẢO MẬT & KÊNH
 # ==========================================
-import os
 # Lấy giá trị Token từ biến môi trường có tên là DISCORD_TOKEN
-token = os.getenv('DISCORD_TOKEN') 
-client.run(token)
+# 1. Khởi tạo Intents (cần thiết cho các bot hiện đại)
+intents = discord.Intents.default()
+intents.message_content = True
+
+# 2. Khởi tạo client/bot
+client = commands.Bot(command_prefix='!', intents=intents)
+
+# 3. Lấy token từ biến môi trường
+token = os.getenv('DISCORD_TOKEN')
+
+# 4. Chạy bot
+if token:
+    client.run(token)
+else:
+    print("Lỗi: Không tìm thấy DISCORD_TOKEN trong biến môi trường!")
 GEMINI_API_KEY = os.getenv('AQ.Ab8RN6Ksq8B762hDLnfkQWOjMSbU2S3QbXsKBtzSnPczkpLRPw')
 WELCOME_CHANNEL_ID = 1515048941161414836 
 ID_KENH_CFS = 1515196032689111171 
