@@ -7,6 +7,9 @@ import urllib.parse
 import random
 import json
 import os
+from discord.ext import commands
+import google.generativeai as genai
+from PIL import Image, ImageDraw, ImageFont
 import io
 import asyncio
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
