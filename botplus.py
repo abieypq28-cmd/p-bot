@@ -16,7 +16,10 @@ load_dotenv()
 # ==========================================
 # 1. CẤU HÌNH BẢO MẬT & KÊNH
 # ==========================================
-DISCORD_BOT_TOKEN = os.getenv('MTUxNzQ4MjU2Mzc0NzE4NDg0MA.GETwXD.-hMAe1ikMmDlo-ebl3Xo-J-Z6d_l7csLbgWJbA')
+import os
+# Lấy giá trị Token từ biến môi trường có tên là DISCORD_TOKEN
+token = os.getenv('DISCORD_TOKEN') 
+client.run(token)
 GEMINI_API_KEY = os.getenv('AQ.Ab8RN6Ksq8B762hDLnfkQWOjMSbU2S3QbXsKBtzSnPczkpLRPw')
 WELCOME_CHANNEL_ID = 1515048941161414836 
 ID_KENH_CFS = 1515196032689111171 
