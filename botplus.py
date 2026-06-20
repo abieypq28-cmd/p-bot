@@ -1,17 +1,15 @@
+import os
 import discord
-import google.generativeai as genai
-from PIL import Image, ImageDraw, ImageFont
-import datetime
+import json
+import random
+import asyncio
+import io
 import urllib.request
 import urllib.parse
-import random
-import json
-import os
+import datetime
 from discord.ext import commands
-import google.generativeai as genai
 from PIL import Image, ImageDraw, ImageFont
-import io
-import asyncio
+import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from dotenv import load_dotenv
 load_dotenv()                 
