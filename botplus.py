@@ -21,15 +21,23 @@ load_dotenv()
 # 1. Khởi tạo Intents (cần thiết cho các bot hiện đại)
 intents = discord.Intents.default()
 intents.message_content = True
-
-# 2. Khởi tạo client/bot
 client = commands.Bot(command_prefix='!', intents=intents)
-
-# 3. Lấy token từ biến môi trường
 token = os.getenv('DISCORD_TOKEN')
-
-# 4. Chạy bot
 if token:
+    from flask import Flask
+from threading import Thread
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot đang chạy 24/7!"
+
+def run_web_server():
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    t = Thread(target=run_web_server)
+    t.start()
     client.run(token)
 else:
     print("Lỗi: Không tìm thấy DISCORD_TOKEN trong biến môi trường!")
