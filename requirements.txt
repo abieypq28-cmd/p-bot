@@ -1,5 +1,5 @@
 discord.py
-google-spreadsheet
-google-auth-library
+gspread
+google-auth
 python-dotenv
 flask
