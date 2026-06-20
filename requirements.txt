@@ -1,0 +1,5 @@
+discord.py
+google-spreadsheet
+google-auth-library
+python-dotenv
+flask
