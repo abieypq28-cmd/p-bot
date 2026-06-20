@@ -4,3 +4,4 @@ google-auth
 python-dotenv
 flask
 google-generativeai
+Pillow
