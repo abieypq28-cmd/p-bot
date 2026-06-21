@@ -59,7 +59,7 @@ BANG_PHAN_LOAI = {
 }
 
 # ==========================================
-# 2. KHỞI TẠO AI VÀ NHÂN CÁCH (LORE)
+# 2. KHỔI TẠO AI VÀ NHÂN CÁCH (LORE)
 # ==========================================
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'AQ.Ab8RN6Ksq8B762hDLnfkQWOjMSbU2S3QbXsKBtzSnPczkpLRPw')
 genai.configure(api_key=GEMINI_API_KEY)
@@ -90,7 +90,7 @@ tri_nho_nguoi_dung = {}
 
 def doc_tri_nho():
     if os.path.exists(FILE_TRI_NHO):
-        with open(FILE_TRI_F_NHO, "r", encoding="utf-8") as f: return json.load(f) if os.path.getsize(FILE_TRI_NHO) > 0 else {}
+        with open(FILE_TRI_NHO, "r", encoding="utf-8") as f: return json.load(f) if os.path.getsize(FILE_TRI_NHO) > 0 else {}
     return {}
 
 def ghi_tri_nho(du_lieu):
@@ -320,7 +320,7 @@ async def in_va_gui_passport(member, role_id):
             embed = discord.Embed(
                 title="🌊 HỘ CHIẾU CƯ DÂN ĐẠI DƯƠNG 🐚",
                 description=(
-                    f"Giữa đêm mưa gió bão bùng, {member.mention} bị cuốn trôi rơi vào **𝓞𝓬𝓮𝓪𝓷 𝓦𝓪𝓿𝓮** ✨\n\n"
+                    f"Giữa đêm mưa gió bùng, {member.mention} bị cuốn trôi rơi vào **𝓞𝓬𝓮𝓪𝓷 𝓦𝓪𝓿𝓮** ✨\n\n"
                     f"⋅‧ ⟡ ‧₊˚┆<#1516117766409683075> - Xem qua luật lệ\n"
                     f"⋅‧ ⟡ ⁠‧₊˚┆<#1511001081117937755> - Nhận role cá nhân\n"
                     f"˚₊‧ ⟡ .࿔:･┆<#1515053474683813918> - Giới thiệu bản thân\n"
@@ -350,7 +350,6 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
     print(f"📥 {member.name} vừa tham gia server.")
-    # Nếu muốn tự gán một role mặc định nào đó khi vừa vào, sếp code thêm ở đây.
 
 # SỰ KIỆN 2: Thành viên thay đổi Role (Cấp passport)
 @client.event
@@ -367,6 +366,26 @@ async def on_member_update(before, after):
 @client.event
 async def on_message(message):
     if message.author.bot: return
+
+    # LỆNH TEST WELCOME THỦ CÔNG MỚI THÊM
+    if message.content == ".testwlc":
+        # Tìm xem sếp có đang sở hữu role sinh vật biển nào trong cấu hình không
+        role_id_hop_le = None
+        for role in message.author.roles:
+            if role.id in BANG_PHAN_LOAI:
+                role_id_hop_le = role.id
+                break
+        
+        # Nếu sếp không có role nào, bot tự bốc bừa role đầu tiên (Whale) để test mẫu
+        if not role_id_hop_le:
+            role_id_hop_le = list(BANG_PHAN_LOAI.keys())[0]
+            await message.channel.send(f"💡 *Mẹo: Sếp chưa sở hữu role đại dương nào, Reze dùng mẫu role `{BANG_PHAN_LOAI[role_id_hop_le]['loai']}` để in thử nhé!*")
+
+        await message.channel.send("🌊 *Reze đang múc nước biển pha mực in... Tiến hành xuất xưởng hộ chiếu thử nghiệm!*")
+        
+        # Gọi hàm in passport bằng chính profile của sếp
+        await in_va_gui_passport(message.author, role_id_hop_le)
+        return
 
     # .setupbait
     if message.content == ".setupbait":
@@ -483,12 +502,9 @@ async def on_message(message):
 # 6. KÍCH HOẠT SERVER VÀ CHẠY BOT
 # ==========================================
 if __name__ == "__main__":
-    # Khởi chạy luồng ẩn cho Web Server Flask
     t = Thread(target=run_web_server)
     t.start()
     
-    # Chạy Bot bằng Token được cấu hình bảo mật trong file .env
-    # (Hãy điền DISCORD_TOKEN=Mã_Token của sếp vào file .env nhé)
     TOKEN_BOT = os.getenv('DISCORD_TOKEN')
     if TOKEN_BOT:
         client.run(TOKEN_BOT)
