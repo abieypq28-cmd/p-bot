@@ -318,7 +318,7 @@ async def in_va_gui_passport(member, role_id):
             file_passport = discord.File(binary, filename='passport.jpg')
             
             embed = discord.Embed(
-                title="🌊 HỘ CHIẾU CƯ DÂN ĐẠI DƯƠNG 🐚",
+                title="🌊 HỘ CHẤU CƯ DÂN ĐẠI DƯƠNG 🐚",
                 description=(
                     f"Giữa đêm mưa gió bùng, {member.mention} bị cuốn trôi rơi vào **𝓞𝓬𝓮𝓪𝓷 𝓦𝓪𝓿𝓮** ✨\n\n"
                     f"⋅‧ ⟡ ‧₊˚┆<#1516117766409683075> - Xem qua luật lệ\n"
@@ -346,10 +346,24 @@ async def on_ready():
     await tree.sync(guild=MY_GUILD)
     print(f'[HỆ THỐNG] Dòng chảy lưu thông! Bot {client.user} đã sẵn sàng 🌊')
 
-# SỰ KIỆN 1: Có người mới tham gia Server
+# SỰ KIỆN 1: Có người mới đặt chân tham gia Server (Tự động gửi tin chào mừng)
 @client.event
 async def on_member_join(member):
     print(f"📥 {member.name} vừa tham gia server.")
+    
+    # Tìm kênh welcome dựa trên cấu hình ID của sếp
+    channel = client.get_channel(WELCOME_CHANNEL_ID)
+    if channel:
+        # Tạo một lời chào mừng bằng chữ dễ thương từ Reze gửi ngay lập tức
+        embed_welcome = discord.Embed(
+            title="🫧 NĂNG LƯỢNG MỚI ĐỔ VỀ ĐẠI DƯƠNG 🌊",
+            description=f"Chào mừng cư dân mới {member.mention} đã bị sóng đánh trôi dạt vào **Ocean Wave**!\n\n> Hãy ghé qua <#1511001081117937755> để chọn một loài **Sinh vật biển** định cư và Reze sẽ cấp Hộ chiếu thông hành ngay lập tức nha! 🐳",
+            color=0x7cd0e6,
+            timestamp=datetime.datetime.now()
+        )
+        embed_welcome.set_thumbnail(url=member.display_avatar.url if member.display_avatar else None)
+        embed_welcome.set_footer(text=f"Thành viên thứ {len(member.guild.members)} bước vào Ocean Wave")
+        await channel.send(content=f"Hey Yo! Cả nhà ơi ra đón người mới nèee {member.mention} 🎉", embed=embed_welcome)
 
 # SỰ KIỆN 2: Thành viên thay đổi Role (Cấp passport)
 @client.event
@@ -367,7 +381,16 @@ async def on_member_update(before, after):
 async def on_message(message):
     if message.author.bot: return
 
-    # LỆNH TEST WELCOME THỦ CÔNG MỚI THÊM
+    # LỆNH ẨN GIẢ LẬP CÓ NGƯỜI VÀO SERVER (.testjoin)
+    if message.content == ".testjoin":
+        if not message.author.guild_permissions.administrator: return
+        await message.channel.send("📥 *Đang giả lập tín hiệu có thành viên mới bước qua cửa hải quan Ocean Wave...*")
+        
+        # Ép bot kích hoạt trực tiếp hàm on_member_join phía trên bằng chính nick của sếp
+        client.dispatch('member_join', message.author)
+        return
+
+    # LỆNH TEST WELCOME THỦ CÔNG (IN PASSPORT MẪU)
     if message.content == ".testwlc":
         # Tìm xem sếp có đang sở hữu role sinh vật biển nào trong cấu hình không
         role_id_hop_le = None
